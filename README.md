@@ -1,1 +1,1 @@
-mass scanner .git .env .rsa 
+mass scanner
