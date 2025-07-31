@@ -1,18 +1,13 @@
 #!/bin/bash
 
-> ip_port.txt 
+> ip_port.txt
 
-while read ip; do
-    echo "[*] Scanning $ip ..."
+scan_ip() {
+    ip="$1"
+    echo "[*] Scanning $ip ..." >&2
+    nmap -Pn -n --open -p- "$ip" | \
+    awk -v ip="$ip" '/^[0-9]+\/tcp/ { split($1,p,"/"); print ip ":" p[1] }'
+}
 
-    rustscan -a "$ip" --ulimit 5000 -- -Pn -n --open |
-    grep -oP '\d+/tcp' | cut -d'/' -f1 |
-    sort -n | uniq | while read port; do
-        echo "${ip}:${port}"
-    done >> ip_port.txt
-
-done < aa.txt
-
-#output
-#127.0.0.1:1337
-#127.0.0.1:13337
+export -f scan_ip
+cat ip.txt | parallel -j10 scan_ip >> ip_port.txt
