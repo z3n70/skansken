@@ -1,6 +1,6 @@
 #!/bin/bash
 
-> ip_port.txt  # Kosongkan file output terlebih dahulu
+> ip_port.txt 
 
 while read ip; do
     echo "[*] Scanning $ip ..."
@@ -13,3 +13,6 @@ while read ip; do
 
 done < aa.txt
 
+#output
+#127.0.0.1:1337
+#127.0.0.1:13337
